@@ -46,3 +46,13 @@ button:disabled {
     background: #c1c7d0;
     cursor: not-allowed;
 }
+
+[hidden] {
+    display: none !important;
+}
+
+.question-area {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #ebecf0;
+}
