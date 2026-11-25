@@ -6,6 +6,7 @@ const questionNumber = document.getElementById('question-number');
 const questionText = document.getElementById('question-text');
 const choicesBox = document.getElementById('choices');
 const nextButton = document.getElementById('next-button');
+const timerLabel = document.getElementById('timer');
 const resultArea = document.getElementById('result-area');
 const scoreHeading = document.getElementById('score');
 const resultList = document.getElementById('result-list');
@@ -114,6 +115,11 @@ export function showResult(result) {
 
 export function hideResult() {
     resultArea.hidden = true;
+}
+
+export function showTimeLeft(seconds) {
+    timerLabel.textContent = `${seconds} s`;
+    timerLabel.classList.toggle('urgent', seconds <= 5);
 }
 
 

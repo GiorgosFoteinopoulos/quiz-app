@@ -1,16 +1,18 @@
 import { APP_NAME, QUESTION_COUNT, SECONDS_PER_QUESTION } from './config.js';
 import { fetchQuestions, submitAnswers } from './api.js';
 import { Quiz } from './quiz.js';
+import { startCountdown } from './timer.js';
 import {
     hideQuestion, hideResult, markSelected, onChoice, onNext, onStart, setNextEnabled, setNextLabel,
-    setStartEnabled, setStartLabel, setStatus, setTitle, showQuestion, showResult
+    setStartEnabled, setStartLabel, setStatus, setTitle, showQuestion, showResult, showTimeLeft
 } from './ui.js';
 
 let quiz = null;
-
+let stopTimer = null;
 
 async function startQuiz() {
     setStartEnabled(false);
+    hideResult();
     setStatus('Loading the questions...');
 
     try {
@@ -28,6 +30,16 @@ function renderQuestion() {
     showQuestion(quiz.currentQuestion(), quiz.questionNumber(), quiz.total());
     setNextEnabled(false);
     setNextLabel(quiz.isLastQuestion() ? 'Finish' : 'Next');
+
+    stopCurrentTimer();
+    stopTimer = startCountdown(SECONDS_PER_QUESTION, showTimeLeft, handleTimeUp);
+}
+
+function stopCurrentTimer() {
+    if (stopTimer !== null) {
+        stopTimer();
+        stopTimer = null;
+    }
 }
 
 function handleChoice(index) {
@@ -37,7 +49,18 @@ function handleChoice(index) {
 }
 
 function handleNext() {
+    stopCurrentTimer();
     quiz.next();
+    if (quiz.isFinished()) {
+        finishQuiz();
+    } else {
+        renderQuestion();
+    }
+}
+
+function handleTimeUp() {
+    stopTimer = null;
+    quiz.timeUp();
     if (quiz.isFinished()) {
         finishQuiz();
     } else {
@@ -47,7 +70,7 @@ function handleNext() {
 
 async function finishQuiz() {
     hideQuestion();
-    setStatus(`Checking your answers...`);
+    setStatus('Checking your answers...');
 
     try {
         const result = await submitAnswers(quiz.answers);
@@ -59,7 +82,6 @@ async function finishQuiz() {
 
     setStartLabel('Start again');
     setStartEnabled(true);
-
 }
 
 setTitle(APP_NAME);
@@ -68,4 +90,3 @@ onStart(startQuiz);
 onChoice(handleChoice);
 onNext(handleNext);
 setStartEnabled(true);
-hideResult();

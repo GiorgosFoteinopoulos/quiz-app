@@ -39,8 +39,15 @@ export class Quiz {
         if (!this.hasSelection()) {
             throw new Error('Pick an answer first');
         }
+        this.record(this.selectedIndex);
+    }
 
-        this.answers.push({questionId: this.currentQuestion().id, choiceIndex: this.selectedIndex });
+    timeUp() {
+        this.record(null);
+    }
+
+    record(choiceIndex) {
+        this.answers.push({ questionId: this.currentQuestion().id, choiceIndex: choiceIndex });
         this.currentIndex = this.currentIndex + 1;
         this.selectedIndex = null;
     }
