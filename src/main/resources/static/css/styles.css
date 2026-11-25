@@ -98,3 +98,52 @@ button:disabled {
     justify-content: flex-end;
     margin-top: 16px;
 }
+
+.result-area {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #ebecf0;
+}
+
+.score {
+    margin: 0 0 16px;
+}
+
+.result-list {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.result {
+    padding: 12px 14px;
+    border-radius: 8px;
+    border-left: 4px solid;
+    background: #fafbfc;
+}
+
+.result.correct {
+    border-left-color: #22a06b;
+}
+
+.result.wrong {
+    border-left-color: #c9372c;
+}
+
+.result-question {
+    margin: 0 0 4px;
+    font-weight: 600;
+}
+
+.result-answers {
+    margin: 0 0 4px;
+    font-size: 14px;
+}
+
+.result-explanation {
+    margin: 0;
+    font-size: 14px;
+    color: #5e6c84;
+}

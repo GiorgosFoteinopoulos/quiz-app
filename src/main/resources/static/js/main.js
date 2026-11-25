@@ -1,9 +1,9 @@
 import { APP_NAME, QUESTION_COUNT, SECONDS_PER_QUESTION } from './config.js';
-import { fetchQuestions } from './api.js';
+import { fetchQuestions, submitAnswers } from './api.js';
 import { Quiz } from './quiz.js';
 import {
-    hideQuestion, markSelected, onChoice, onNext, onStart, setNextEnabled, setNextLabel,
-    setStartEnabled, setStartLabel, setStatus, setTitle, showQuestion
+    hideQuestion, hideResult, markSelected, onChoice, onNext, onStart, setNextEnabled, setNextLabel,
+    setStartEnabled, setStartLabel, setStatus, setTitle, showQuestion, showResult
 } from './ui.js';
 
 let quiz = null;
@@ -45,12 +45,21 @@ function handleNext() {
     }
 }
 
-function finishQuiz() {
+async function finishQuiz() {
     hideQuestion();
-    setStatus(`You answered all ${quiz.total()} questions. Scoring comes in QZ-6.`);
-    console.log('Answers to send to the server:', quiz.answers);
+    setStatus(`Checking your answers...`);
+
+    try {
+        const result = await submitAnswers(quiz.answers);
+        showResult(result);
+        setStatus('Here is how you did.');
+    } catch (error) {
+        setStatus('Could not check your answers: ' + error.message);
+    }
+
     setStartLabel('Start again');
     setStartEnabled(true);
+
 }
 
 setTitle(APP_NAME);
@@ -59,3 +68,4 @@ onStart(startQuiz);
 onChoice(handleChoice);
 onNext(handleNext);
 setStartEnabled(true);
+hideResult();

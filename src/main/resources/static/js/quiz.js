@@ -3,7 +3,7 @@ export class Quiz {
     constructor(questions) {
         this.questions = questions;
         this.currentIndex = 0;
-        this.selectedIndex = 0;
+        this.selectedIndex = null;
         this.answers = [];
     }
 

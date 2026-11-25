@@ -6,7 +6,9 @@ const questionNumber = document.getElementById('question-number');
 const questionText = document.getElementById('question-text');
 const choicesBox = document.getElementById('choices');
 const nextButton = document.getElementById('next-button');
-
+const resultArea = document.getElementById('result-area');
+const scoreHeading = document.getElementById('score');
+const resultList = document.getElementById('result-list');
 
 export function setTitle(text) {
     titleHeading.textContent = text;
@@ -79,6 +81,40 @@ export function onNext(handler) {
     nextButton.addEventListener('click', handler);
 }
 
+export function showResult(result) {
+    scoreHeading.textContent = `You scored ${result.correct} out of ${result.total}`;
+
+    resultList.replaceChildren();
+    for (const item of result.results) {
+        const entry = document.createElement('li');
+        entry.className = item.correct ? 'result correct' : 'result wrong';
+
+        const question = document.createElement('p');
+        question.className = 'result-question';
+        question.textContent = `${item.correct ? '✓' : '✗'} ${item.question}`;
+
+        const answers = document.createElement('p');
+        answers.className = 'result-answers';
+        if (item.correct) {
+            answers.textContent = `Your answer: ${item.yourAnswer}`;
+        } else {
+            answers.textContent = `Your answer: ${item.yourAnswer ?? 'no answer'} · Correct answer: ${item.correctAnswer}`;
+        }
+
+        const explanation = document.createElement('p');
+        explanation.className = 'result-explanation';
+        explanation.textContent = item.explanation;
+
+        entry.append(question, answers, explanation);
+        resultList.append(entry);
+    }
+
+    resultArea.hidden = false;
+}
+
+export function hideResult() {
+    resultArea.hidden = true;
+}
 
 
 

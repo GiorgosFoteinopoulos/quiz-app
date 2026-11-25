@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QuestionService {
@@ -41,6 +42,12 @@ public class QuestionService {
 
     public int count() {
         return questions.size();
+    }
+
+    public Optional<Question> findById(long id) {
+        return questions.stream()
+                .filter(question -> question.id() == id)
+                .findFirst();
     }
 
     public List<QuestionView> randomQuestions(int count) {
