@@ -122,5 +122,9 @@ export function showTimeLeft(seconds) {
     timerLabel.classList.toggle('urgent', seconds <= 5);
 }
 
+export function onKey(handler) {
+    document.addEventListener('keydown', handler);
+}
+
 
 

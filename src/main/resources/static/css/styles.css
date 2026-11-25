@@ -170,3 +170,19 @@ button:disabled {
     color: #bf2600;
     font-weight: 600;
 }
+
+.key-hint {
+    margin: 14px 0 0;
+    font-size: 13px;
+    color: #7a869a;
+}
+
+kbd {
+    padding: 1px 6px;
+    border: 1px solid #c1c7d0;
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    background: #fafbfc;
+    font-family: inherit;
+    font-size: 12px;
+}

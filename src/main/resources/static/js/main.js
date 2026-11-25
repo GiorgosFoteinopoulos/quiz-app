@@ -3,7 +3,7 @@ import { fetchQuestions, submitAnswers } from './api.js';
 import { Quiz } from './quiz.js';
 import { startCountdown } from './timer.js';
 import {
-    hideQuestion, hideResult, markSelected, onChoice, onNext, onStart, setNextEnabled, setNextLabel,
+    hideQuestion, hideResult, markSelected, onChoice, onKey, onNext, onStart, setNextEnabled, setNextLabel,
     setStartEnabled, setStartLabel, setStatus, setTitle, showQuestion, showResult, showTimeLeft
 } from './ui.js';
 
@@ -68,6 +68,27 @@ function handleTimeUp() {
     }
 }
 
+function handleKey(event) {
+    if (quiz === null || quiz.isFinished()) {
+        return;
+    }
+    if (event.ctrlKey || event.altKey || event.metaKey || event.repeat) {
+        return;
+    }
+
+    const choiceNumber = Number(event.key);
+    if (choiceNumber >= 1 && choiceNumber <= quiz.currentQuestion().choices.length) {
+        event.preventDefault();
+        handleChoice(choiceNumber - 1);
+        return;
+    }
+
+    if (event.key === 'Enter' && quiz.hasSelection()) {
+        event.preventDefault();
+        handleNext();
+    }
+}
+
 async function finishQuiz() {
     hideQuestion();
     setStatus('Checking your answers...');
@@ -89,4 +110,5 @@ setStatus(`Ready. ${QUESTION_COUNT} questions, ${SECONDS_PER_QUESTION} seconds e
 onStart(startQuiz);
 onChoice(handleChoice);
 onNext(handleNext);
+onKey(handleKey);
 setStartEnabled(true);
